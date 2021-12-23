@@ -27,3 +27,11 @@ To run a command with arguments use `--` to escape `watchdiff`s argument parser,
 ```
 watchdiff -n 5 -- ls -alh
 ```
+
+## Installation
+
+If you have Rust and Cargo installed, Watchdiff can be quickly compiled and installed by running the following command:
+```
+cargo install watchdiff
+```
+This will install Watchdiff to ~/.cargo/bin/watchdiff, which might need to be added to your shell's PATH variable.
