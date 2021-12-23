@@ -1,3 +1,4 @@
+use chrono::prelude::*;
 use std::process::Command;
 use std::{thread, time};
 
@@ -13,11 +14,12 @@ fn main() {
         let diff = String::from_utf8_lossy(&compare.stdout);
 
         if out != diff {
+            let local = Local::now();
+            println!("Diff at {}", local.to_string());
             println!("{}", diff);
             break;
         }
 
         thread::sleep(time::Duration::from_secs(1));
     }
-
 }
