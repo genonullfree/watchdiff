@@ -8,5 +8,16 @@ Watchdiff will monitor command output and will output in the terminal whenever a
 ## Usage
 
 ```bash
-watchdiff <command>
+USAGE:
+    watchdiff [OPTIONS] [command]...
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+OPTIONS:
+    -d, --delay <delay>    Delay between runs in seconds [default: 2]
+
+ARGS:
+    <command>...    Command to run
 ```
