@@ -1,6 +1,6 @@
 [package]
 name = "watchdiff"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["geno nullfree <nullfree.geno@gmail.com>"]
 license = "BSD-3-Clause"
 description = "A small utility to diff watch output"
@@ -15,3 +15,4 @@ edition = "2021"
 
 [dependencies]
 chrono = "0.4.19"
+structopt = "0.3.13"
