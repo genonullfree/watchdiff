@@ -1,6 +1,14 @@
 [package]
 name = "watchdiff"
 version = "0.1.0"
+authors = ["geno nullfree <nullfree.geno@gmail.com>"]
+license = "BSD-3-Clause"
+description = "A small utility to diff watch output"
+readme = "README.md"
+homepage = "https://github.com/genonullfree/watchdiff.git"
+repository = "https://github.com/genonullfree/watchdiff.git"
+keywords = ["diff", "watch"]
+categories = ["command-line-utilities"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
