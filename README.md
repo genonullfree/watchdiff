@@ -9,15 +9,21 @@ Watchdiff will monitor command output and will output in the terminal whenever a
 
 ```bash
 USAGE:
-    watchdiff [OPTIONS] [command]...
+    watchdiff [FLAGS] [OPTIONS] [command]...
 
 FLAGS:
-    -h, --help       Prints help information
-    -V, --version    Prints version information
+    -h, --help         Prints help information
+    -p, --permament    Compare to the initial output (permament mode)
+    -V, --version      Prints version information
 
 OPTIONS:
     -d, --delay <delay>    Delay between runs in seconds [default: 2]
 
 ARGS:
     <command>...    Command to run
+```
+
+To run a command with arguments use `--` to escape `watchdiff`s argument parser, like so:
+```
+watchdiff -n 5 -- ls -alh
 ```
