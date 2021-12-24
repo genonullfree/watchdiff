@@ -25,7 +25,7 @@ ARGS:
 
 To run a command with arguments use `--` to escape `watchdiff`s argument parser, like so:
 ```
-watchdiff -n 5 -- ls -alh
+watchdiff -d 5 -- ls -alh
 ```
 
 ## Installation
