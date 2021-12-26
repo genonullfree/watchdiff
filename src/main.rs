@@ -17,6 +17,11 @@ pub struct Opt {
     command: Vec<String>,
 }
 
+enum PrintType {
+    Add,
+    Del,
+}
+
 fn main() {
     // Process arguments
     let opt = Opt::from_args();
@@ -44,7 +49,7 @@ fn do_watchdiff(opt: Opt) {
 
         // Compare with previous output
         if out != diff {
-            print_diff(&diff, &out);
+            print_diff(&out, &diff);
             if !opt.permament {
                 out = diff;
             }
@@ -64,6 +69,44 @@ fn run_command(cmd: &mut Command) -> String {
 fn print_diff(a: &str, b: &str) {
     let local = Local::now();
     println!("Diff at {}", local.to_string());
-    println!("orig:\n{}", a);
-    println!("new:\n{}", b);
+    let orig = a.split('\n').collect::<Vec<&str>>();
+    let new = b.split('\n').collect::<Vec<&str>>();
+
+    let orig_len = orig.len();
+    let new_len = new.len();
+
+    for (i, o) in orig.iter().enumerate() {
+        if i >= new_len {
+            print_all(&orig[i - 1..orig_len - 1], PrintType::Del);
+            return;
+        }
+        if o == &new[i] {
+            print_same(o);
+        } else {
+        }
+    }
+
+    // TODO: Fix this part
+    if new_len > orig_len {
+        print_all(&new[orig_len - 1..new_len - 1], PrintType::Add);
+    }
+}
+
+fn print_all(a: &[&str], print: PrintType) {
+    match print {
+        PrintType::Add => a.iter().map(|a| print_add(a)).collect(),
+        PrintType::Del => a.iter().map(|a| print_del(a)).collect(),
+    }
+}
+
+fn print_add(a: &str) {
+    println!(" + {}", a);
+}
+
+fn print_del(a: &str) {
+    println!(" - {}", a);
+}
+
+fn print_same(a: &str) {
+    println!("   {}", a);
 }
