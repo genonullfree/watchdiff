@@ -74,21 +74,40 @@ fn print_diff(a: &str, b: &str) {
 
     let orig_len = orig.len();
     let new_len = new.len();
+    let mut orig_idx = 0;
+    let mut new_idx = 0;
 
-    for (i, o) in orig.iter().enumerate() {
-        if i >= new_len {
-            print_all(&orig[i - 1..orig_len - 1], PrintType::Del);
-            return;
-        }
-        if o == &new[i] {
-            print_same(o);
+    'check: loop {
+        if orig_idx == orig_len && new_idx == new_len {
+            break;
+        } else if orig_idx == orig_len && new_idx < new_len {
+            print_all(&new[new_idx..new_len - 1], PrintType::Add);
+            break;
+        } else if new_idx == new_len && orig_idx < orig_len {
+            print_all(&orig[orig_idx..orig_len - 1], PrintType::Del);
+            break;
+        } else if orig[orig_idx] == new[new_idx] {
+            print_same(orig[orig_idx]);
+            orig_idx += 1;
+            new_idx += 1;
         } else {
+            let tmp = new_idx;
+            for i in tmp..new_len {
+                if orig[orig_idx] == new[i] {
+                    print_add(new[new_idx]);
+                    new_idx += 1;
+                    continue 'check;
+                }
+            }
+            let tmp = orig_idx;
+            for i in tmp..orig_len {
+                if new[new_idx] == orig[i] {
+                    print_del(orig[orig_idx]);
+                    orig_idx += 1;
+                    continue 'check;
+                }
+            }
         }
-    }
-
-    // TODO: Fix this part
-    if new_len > orig_len {
-        print_all(&new[orig_len - 1..new_len - 1], PrintType::Add);
     }
 }
 
