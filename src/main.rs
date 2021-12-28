@@ -1,4 +1,5 @@
 use chrono::prelude::*;
+use colored::*;
 use std::process::Command;
 use std::{thread, time};
 use structopt::StructOpt;
@@ -68,31 +69,33 @@ fn run_command(cmd: &mut Command) -> String {
 
 fn print_diff(a: &str, b: &str) {
     let local = Local::now();
-    println!("Diff at {}", local.to_string());
+    let banner = format!("Diff at {}", local.to_string());
+    println!("{}", banner.bold().underline());
     let orig = a.split('\n').collect::<Vec<&str>>();
     let new = b.split('\n').collect::<Vec<&str>>();
 
-    let orig_len = orig.len();
-    let new_len = new.len();
+    let orig_max = orig.len() - 1;
+    let new_max = new.len() - 1;
     let mut orig_idx = 0;
     let mut new_idx = 0;
 
     'check: loop {
-        if orig_idx == orig_len && new_idx == new_len {
+        if orig_idx == orig_max && new_idx == new_max {
             break;
-        } else if orig_idx == orig_len && new_idx < new_len {
-            print_all(&new[new_idx..new_len - 1], PrintType::Add);
+        } else if orig_idx == orig_max && new_idx < new_max {
+            print_all(&new[new_idx..new_max], PrintType::Add);
             break;
-        } else if new_idx == new_len && orig_idx < orig_len {
-            print_all(&orig[orig_idx..orig_len - 1], PrintType::Del);
+        } else if new_idx == new_max && orig_idx < orig_max {
+            print_all(&orig[orig_idx..orig_max], PrintType::Del);
             break;
         } else if orig[orig_idx] == new[new_idx] {
             print_same(orig[orig_idx]);
             orig_idx += 1;
             new_idx += 1;
+            continue;
         } else {
             let tmp = new_idx;
-            for i in tmp..new_len {
+            for i in tmp..new_max {
                 if orig[orig_idx] == new[i] {
                     print_add(new[new_idx]);
                     new_idx += 1;
@@ -100,7 +103,7 @@ fn print_diff(a: &str, b: &str) {
                 }
             }
             let tmp = orig_idx;
-            for i in tmp..orig_len {
+            for i in tmp..orig_max {
                 if new[new_idx] == orig[i] {
                     print_del(orig[orig_idx]);
                     orig_idx += 1;
@@ -108,6 +111,12 @@ fn print_diff(a: &str, b: &str) {
                 }
             }
         }
+
+        print_del(orig[orig_idx]);
+        print_add(new[new_idx]);
+
+        orig_idx += 1;
+        new_idx += 1;
     }
 }
 
@@ -119,11 +128,13 @@ fn print_all(a: &[&str], print: PrintType) {
 }
 
 fn print_add(a: &str) {
-    println!(" + {}", a);
+    let b = format!(" + {}", a);
+    println!("{}", b.green());
 }
 
 fn print_del(a: &str) {
-    println!(" - {}", a);
+    let b = format!(" - {}", a);
+    println!("{}", b.red());
 }
 
 fn print_same(a: &str) {
