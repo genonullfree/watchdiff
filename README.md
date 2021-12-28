@@ -35,3 +35,9 @@ If you have Rust and Cargo installed, Watchdiff can be quickly compiled and inst
 cargo install watchdiff
 ```
 This will install Watchdiff to ~/.cargo/bin/watchdiff, which might need to be added to your shell's PATH variable.
+
+## Example output
+
+The Watchdiff output is colorized such that red lines with a `-` prepended were removed, and green lines with a `+` were added.
+
+![diff output](img/watchdiff.png "Watchdiff example output")
