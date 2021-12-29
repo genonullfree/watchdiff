@@ -27,15 +27,22 @@ fn main() {
     // Process arguments
     let opt = Opt::from_args();
 
+    // Require a command to run
     if opt.command.is_empty() {
         println!("Need to supply a command.");
         return;
     }
 
+    // Run command
     do_watchdiff(opt);
 }
 
 fn do_watchdiff(opt: Opt) {
+    // Print origin time
+    let local = Local::now();
+    let banner = format!("Origin at {}", local.to_string());
+    println!("{}", banner.bold().underline());
+
     // Setup command and arguments
     let mut raw = Command::new(&opt.command[0]);
     let cmd = raw.args(&opt.command[1..]);
@@ -68,32 +75,44 @@ fn run_command(cmd: &mut Command) -> String {
 }
 
 fn print_diff(a: &str, b: &str) {
+    // Print diff time
     let local = Local::now();
     let banner = format!("Diff at {}", local.to_string());
     println!("{}", banner.bold().underline());
+
+    // Split output into lines
     let orig = a.split('\n').collect::<Vec<&str>>();
     let new = b.split('\n').collect::<Vec<&str>>();
 
+    // Calculate the max index values
     let orig_max = orig.len() - 1;
     let new_max = new.len() - 1;
+
+    // Instantiate counters
     let mut orig_idx = 0;
     let mut new_idx = 0;
 
+    // Iterate through each index of the orig and new lists
     'check: loop {
         if orig_idx == orig_max && new_idx == new_max {
+            // If we've reached the end of both lists, we're done
             break;
         } else if orig_idx == orig_max && new_idx < new_max {
+            // If we've reached the end of the original, everything else was added
             print_all(&new[new_idx..new_max], PrintType::Add);
             break;
         } else if new_idx == new_max && orig_idx < orig_max {
+            // If we've reached the end of the new, everything else was removed
             print_all(&orig[orig_idx..orig_max], PrintType::Del);
             break;
         } else if orig[orig_idx] == new[new_idx] {
+            // If both values are identical, there was no change
             print_same(orig[orig_idx]);
             orig_idx += 1;
             new_idx += 1;
             continue;
         } else {
+            // Iterate through the rest of the new list looking for the current old to identify an added item in new
             let tmp = new_idx;
             for i in tmp..new_max {
                 if orig[orig_idx] == new[i] {
@@ -102,6 +121,8 @@ fn print_diff(a: &str, b: &str) {
                     continue 'check;
                 }
             }
+
+            // Iterate through the rest of the orig list looking for the current new to identify a removed item in orig
             let tmp = orig_idx;
             for i in tmp..orig_max {
                 if new[new_idx] == orig[i] {
@@ -112,6 +133,7 @@ fn print_diff(a: &str, b: &str) {
             }
         }
 
+        // If nothing else was detected, the current index was both removed from orig and added in new
         print_del(orig[orig_idx]);
         print_add(new[new_idx]);
 
@@ -121,6 +143,7 @@ fn print_diff(a: &str, b: &str) {
 }
 
 fn print_all(a: &[&str], print: PrintType) {
+    // Depending on Add or Del, iterate through the slice and print each line
     match print {
         PrintType::Add => a.iter().map(|a| print_add(a)).collect(),
         PrintType::Del => a.iter().map(|a| print_del(a)).collect(),
@@ -128,15 +151,18 @@ fn print_all(a: &[&str], print: PrintType) {
 }
 
 fn print_add(a: &str) {
+    // Print an added line
     let b = format!(" + {}", a);
     println!("{}", b.green());
 }
 
 fn print_del(a: &str) {
+    // Print a removed line
     let b = format!(" - {}", a);
     println!("{}", b.red());
 }
 
 fn print_same(a: &str) {
+    // Print a line
     println!("   {}", a);
 }
