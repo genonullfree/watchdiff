@@ -40,7 +40,7 @@ fn main() {
 fn do_watchdiff(opt: Opt) {
     // Print origin time
     let local = Local::now();
-    let banner = format!("Origin at {}", local.to_string());
+    let banner = format!("Origin at {}", local);
     println!("{}", banner.bold().underline());
 
     // Setup command and arguments
@@ -77,7 +77,7 @@ fn run_command(cmd: &mut Command) -> String {
 fn print_diff(a: &str, b: &str) {
     // Print diff time
     let local = Local::now();
-    let banner = format!("Diff at {}", local.to_string());
+    let banner = format!("Diff at {}", local);
     println!("{}", banner.bold().underline());
 
     // Split output into lines
