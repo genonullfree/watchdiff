@@ -23,6 +23,9 @@ enum PrintType {
     Del,
 }
 
+const BASH: &str = "/bin/bash";
+const C: &str = "-c";
+
 fn main() {
     // Process arguments
     let opt = Opt::from_args();
@@ -44,14 +47,22 @@ fn do_watchdiff(opt: Opt) {
     println!("{}", banner.bold().underline());
 
     // Setup command and arguments
-    let mut raw = Command::new(&opt.command[0]);
-    let cmd = raw.args(&opt.command[1..]);
+    let mut raw = Command::new(BASH);
+    let mut args = vec![C];
+    for c in &opt.command {
+        args.push(c);
+    }
+    let cmd = raw.args(&args);
 
     // Run initial command
     let mut out = run_command(cmd);
     println!("{}", out);
 
     loop {
+        // Re-setup command and arguments
+        let mut raw = Command::new(BASH);
+        let cmd = raw.args(&args);
+
         // Run command update
         let diff = run_command(cmd);
 

@@ -1,6 +1,6 @@
 [package]
 name = "watchdiff"
-version = "0.2.1"
+version = "0.2.2"
 authors = ["geno nullfree <nullfree.geno@gmail.com>"]
 license = "BSD-3-Clause"
 description = "A small utility to diff watch output"

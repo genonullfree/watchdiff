@@ -263,7 +263,7 @@ checksum = "1a143597ca7c7793eff794def352d41792a93c481eb1042423ff7ff72ba2c31f"
 
 [[package]]
 name = "watchdiff"
-version = "0.2.1"
+version = "0.2.2"
 dependencies = [
  "chrono",
  "colored",
